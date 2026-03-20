@@ -58,7 +58,7 @@
       background: #f7fafc;
       font-family: inherit;
     }
-    /* iOS: nÃ£o remover appearance do select â deixa o picker nativo funcionar */
+    /* iOS: não remover appearance do select — deixa o picker nativo funcionar */
     select { cursor: pointer; }
     input:focus, select:focus {
       outline: none; border-color: #1a56db; background: white;
@@ -81,7 +81,7 @@
     .pix-item label { font-size: 0.78rem; }
     .pix-item input, .pix-item select { padding: 12px; font-size: 0.95rem; }
 
-    /* BotÃ£o remover â Ã¡rea de toque generosa */
+    /* Botão remover — área de toque generosa */
     .btn-remove {
       position: absolute; top: 10px; right: 10px;
       background: #fee2e2; color: #e53e3e;
@@ -90,7 +90,7 @@
       cursor: pointer; min-width: 60px; min-height: 36px;
     }
 
-    /* BotÃµes principais */
+    /* Botões principais */
     .btn {
       display: block; width: 100%;
       padding: 16px; margin-bottom: 10px;
@@ -182,9 +182,8 @@
   </style>
 </head>
 <body>
-
 <header>
-  <h1>ð¸ Registro de PIX</h1>
+  <h1>💸 Registro de PIX</h1>
   <p>Preencha os dados de cada PIX realizado na viagem</p>
 </header>
 
@@ -192,43 +191,43 @@
 
   <div id="form-section">
     <div class="card">
-      <div class="card-title">ð¤ IdentificaÃ§Ã£o</div>
+      <div class="card-title">👤 Identificação</div>
       <div class="field">
         <label>Seu Nome</label>
-        <input type="text" id="promotor" placeholder="Ex: JoÃ£o Silva" autocomplete="name" />
+        <input type="text" id="promotor" placeholder="Ex: João Silva" autocomplete="name" />
       </div>
       <div class="field">
-        <label>Nome ou CÃ³digo da Viagem</label>
-        <input type="text" id="viagem" placeholder="Ex: Viagem SP â Mar/2026" />
+        <label>Nome ou Código da Viagem</label>
+        <input type="text" id="viagem" placeholder="Ex: Viagem SP – Mar/2026" />
       </div>
     </div>
 
     <div class="card">
-      <div class="card-title">ð PIX Realizados</div>
+      <div class="card-title">📋 PIX Realizados</div>
       <div id="pix-list"></div>
-      <button class="btn btn-add" id="btn-add-pix">â Adicionar PIX</button>
+      <button class="btn btn-add" id="btn-add-pix">➕ Adicionar PIX</button>
     </div>
 
     <div class="card">
-      <div class="card-title">â Finalizar</div>
-      <button class="btn btn-save" id="btn-salvar">ð¾ Salvar Registros</button>
-      <button class="btn btn-clear" id="btn-limpar">ðï¸ Apagar tudo e recomeÃ§ar</button>
+      <div class="card-title">✅ Finalizar</div>
+      <button class="btn btn-save" id="btn-salvar">💾 Salvar Registros</button>
+      <button class="btn btn-clear" id="btn-limpar">🗐️ Apagar tudo e recomeçar</button>
     </div>
   </div>
 
   <div id="success-banner">
-    <div class="icon-big">â</div>
+    <div class="icon-big">✅</div>
     <h2>Registros salvos!</h2>
     <p id="success-msg"></p>
     <br>
-    <button class="btn btn-add" id="btn-nova-viagem" style="margin-top:8px;">â Registrar outra viagem</button>
+    <button class="btn btn-add" id="btn-nova-viagem" style="margin-top:8px;">➕ Registrar outra viagem</button>
   </div>
 
-  <button class="btn-admin-toggle" id="btn-toggle-admin">âï¸ Ãrea administrativa</button>
+  <button class="btn-admin-toggle" id="btn-toggle-admin">⚘️ Área administrativa</button>
 
   <div id="admin-section">
     <div class="admin-lock">
-      <div class="admin-title">ð Acesso restrito â apenas administrador</div>
+      <div class="admin-title">🔒 Acesso restrito — apenas administrador</div>
       <div class="admin-input-row">
         <input type="password" id="admin-senha" placeholder="Senha admin" />
         <button class="btn-unlock" id="btn-entrar-admin">Entrar</button>
@@ -238,9 +237,9 @@
 
     <div id="admin-content">
       <div class="card">
-        <div class="summary-title">ð Todos os Registros</div>
+        <div class="summary-title">📊 Todos os Registros</div>
         <div class="counter-bar" id="counter-bar"></div>
-        <button class="btn btn-export" id="btn-exportar" style="margin-bottom:14px;">ð¥ Exportar Planilha (.csv)</button>
+        <button class="btn btn-export" id="btn-exportar" style="margin-bottom:14px;">📥 Exportar Planilha (.csv)</button>
         <div class="table-wrap">
           <table>
             <thead>
@@ -262,19 +261,19 @@
 
 <script>
   /* =========================================================
-     CONFIGURAÃÃO
+     CONFIGURAÇÃO
   ========================================================= */
   var ADMIN_SENHA = 'admin123';
   var STORAGE_KEY = 'registros_pix_v2';
   var CONTAS = [
-    { value: 'juridica', label: 'JurÃ­dica (Bradesco)' },
-    { value: 'grupo',    label: 'Grupo GregÃ³rio' },
-    { value: 'fisica',   label: 'FÃ­sica' }
+    { value: 'juridica', label: 'Jurídica (Bradesco)' },
+    { value: 'grupo',    label: 'Grupo Gregório' },
+    { value: 'fisica',   label: 'Física' }
   ];
   var pixCount = 0;
 
   /* =========================================================
-     INICIALIZAÃÃO â todos os eventos aqui, sem onclick no HTML
+     INICIALIZAÇÃO — todos os eventos aqui, sem onclick no HTML
   ========================================================= */
   document.addEventListener('DOMContentLoaded', function () {
     addPix();
@@ -292,15 +291,15 @@
       if (e.key === 'Enter') verificarSenha();
     });
 
-    // DelegaÃ§Ã£o de eventos para botÃµes "Remover" criados dinamicamente
+    // Delegação de eventos para botões "Remover" criados dinamicamente
     get('pix-list').addEventListener('click', function (e) {
       var btn = e.target.closest('.btn-remove');
-      if (btn) removePix(btn.dataset.id);
+      if (btn)removePix(btn.dataset.id);
     });
   });
 
   /* =========================================================
-     UTILITÃRIOS
+     UTILITÁRIOS
   ========================================================= */
   function get(id) { return document.getElementById(id); }
 
@@ -328,23 +327,23 @@
     div.id = 'pix-' + n;
     div.innerHTML =
       '<div class="pix-item-header">PIX #' + n + '</div>' +
-      '<button type="button" class="btn-remove" data-id="' + n + '">â Remover</button>' +
+      '<button type="button" class="btn-remove" data-id="' + n + '">✕ Remover</button>' +
       '<div class="field"><label>Data do PIX</label>' +
         '<input type="date" id="data-' + n + '" /></div>' +
       '<div class="field"><label>Valor (R$)</label>' +
         '<input type="number" id="valor-' + n + '" placeholder="0,00" min="0" step="0.01" inputmode="decimal" /></div>' +
-      '<div class="field"><label>Conta DestinatÃ¡ria</label>' +
+      '<div class="field"><label>Conta Destinatária</label>' +
         '<select id="conta-' + n + '">' + optsHtml + '</select></div>' +
       '<div class="field"><label>Nome de Quem Fez o PIX</label>' +
         '<input type="text" id="pagador-' + n + '" placeholder="Ex: Maria Oliveira" /></div>';
 
     get('pix-list').appendChild(div);
 
-    // Data de hoje como padrÃ£o
+    // Data de hoje como padrão
     var hoje = new Date().toISOString().split('T')[0];
     get('data-' + n).value = hoje;
 
-    // Scroll suave atÃ© o novo PIX
+    // Scroll suave até o novo PIX
     setTimeout(function () { div.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
   }
 
@@ -354,17 +353,17 @@
   }
 
   /* =========================================================
-     COLETA E VALIDAÃÃO
+     COLETA E VALIDAÇÃO
   ========================================================= */
   function coletarDados() {
     var promotor = get('promotor').value.trim();
     var viagem   = get('viagem').value.trim();
 
-    if (!promotor) { toast('â ï¸ Preencha seu nome!'); return null; }
-    if (!viagem)   { toast('â ï¸ Preencha o nome da viagem!'); return null; }
+    if (!promotor) { toast('⚠️ Preencha seu nome!'); return null; }
+    if (!viagem)   { toast('⚠️ Preencha o nome da viagem!'); return null; }
 
     var items = document.querySelectorAll('.pix-item');
-    if (items.length === 0) { toast('â ï¸ Adicione pelo menos um PIX!'); return null; }
+    if (items.length === 0) { toast('⚠️ Adicione pelo menos um PIX!'); return null; }
 
     var registros = [];
     var valido = true;
@@ -377,7 +376,7 @@
       var pagador = get('pagador-'+ id) ? get('pagador-'+ id).value.trim() : '';
 
       if (!data || !valor || !conta || !pagador) {
-        toast('â ï¸ Preencha todos os campos de cada PIX!');
+        toast('⚠️ Preencha todos os campos de cada PIX!');
         valido = false;
         break;
       }
@@ -419,7 +418,7 @@
     get('success-msg').innerHTML =
       '<strong>' + novos.length + ' PIX</strong> da viagem "<strong>' + novos[0].viagem + '</strong>" salvos.<br>' +
       'Total: <strong>R$ ' + total.toFixed(2).replace('.', ',') + '</strong><br><br>' +
-      'VocÃª pode fechar ou registrar outra viagem.';
+      'Você pode fechar ou registrar outra viagem.';
   }
 
   /* =========================================================
@@ -439,13 +438,13 @@
      LIMPAR
   ========================================================= */
   function limparTudo() {
-    if (!window.confirm('Tem certeza? Todos os dados preenchidos serÃ£o apagados.')) return;
+    if (!window.confirm('Tem certeza? Todos os dados preenchidos serão apagados.')) return;
     get('pix-list').innerHTML = '';
     get('promotor').value = '';
     get('viagem').value   = '';
     pixCount = 0;
     addPix();
-    toast('ðï¸ FormulÃ¡rio limpo.');
+    toast('🗐️ Formulário limpo.');
   }
 
   /* =========================================================
@@ -458,7 +457,7 @@
 
   function verificarSenha() {
     var senha = get('admin-senha').value;
-    if (senha === ADMIN_SENHA) {
+    if (senha === ADMAN_SENHA) {
       get('admin-erro').style.display   = 'none';
       get('admin-content').style.display = 'block';
       renderizarTabela();
@@ -500,7 +499,7 @@
       var r = dados[i];
       if (r.viagem !== lastViagem) {
         if (lastViagem !== null) {
-          html += '<tr class="total-row"><td colspan="3" style="text-align:right">Total â ' + lastViagem + '</td>' +
+          html += '<tr class="total-row"><td colspan="3" style="text-align:right">Total — ' + lastViagem + '</td>' +
             '<td>R$ ' + totais[lastViagem].toFixed(2).replace('.', ',') + '</td><td colspan="2"></td></tr>';
         }
         lastViagem = r.viagem;
@@ -513,12 +512,12 @@
         '<td>' + r.pagador + '</td></tr>';
     }
     if (lastViagem) {
-      html += '<tr class="total-row"><td colspan="3" style="text-align:right">Total â ' + lastViagem + '</td>' +
+      html += '<tr class="total-row"><td colspan="3" style="text-align:right">Total — ' + lastViagem + '</td>' +
         '<td>R$ ' + totais[lastViagem].toFixed(2).replace('.', ',') + '</td><td colspan="2"></td></tr>';
     }
 
     tbody.innerHTML = html;
-    counter.textContent = dados.length + ' PIX registrado(s) Â· Total geral: R$ ' + totalGeral.toFixed(2).replace('.', ',');
+    counter.textContent = dados.length + ' PIX registrado(s) · Total geral: R$ ' + totalGeral.toFixed(2).replace('.', ',');
   }
 
   /* =========================================================
@@ -529,7 +528,7 @@
     try { dados = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) {}
     if (dados.length === 0) { toast('Nenhum dado para exportar!'); return; }
 
-    var linhas = ['"Viagem";"Promotor";"Data";"Valor (R$)";"Conta DestinatÃ¡ria";"Quem Fez o PIX"'];
+    var linhas = ['"Viagem";"Promotor";"Data";"Valor (R$)";"Conta Destinatária";"Quem Fez o PIX"'];
     for (var i = 0; i < dados.length; i++) {
       var r = dados[i];
       var dataFmt = r.data ? r.data.split('-').reverse().join('/') : '';
@@ -553,7 +552,7 @@
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    toast('ð¥ Planilha exportada!');
+    toast('📥 Planilha exportada!');
   }
 </script>
 
