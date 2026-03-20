@@ -8,218 +8,554 @@
   <title>Registro de PIX</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { -webkit-text-size-adjust: 100%; touch-action: manipulation; }
-    body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a202c; min-height: 100vh; -webkit-tap-highlight-color: transparent; }
-    header { background: linear-gradient(135deg, #1a56db, #0e3fa8); color: white; padding: 22px 16px 18px; text-align: center; }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      touch-action: manipulation;
+    }
+
+    body {
+      font-family: -apple-system, 'Segoe UI', Arial, sans-serif;
+      background: #f0f4f8;
+      color: #1a202c;
+      min-height: 100vh;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a56db, #0e3fa8);
+      color: white;
+      padding: 22px 16px 18px;
+      text-align: center;
+    }
     header h1 { font-size: 1.5rem; font-weight: 700; }
     header p  { font-size: 0.85rem; margin-top: 4px; opacity: 0.88; }
+
     .container { max-width: 620px; margin: 0 auto; padding: 16px; }
-    .card { background: white; border-radius: 14px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .card-title { font-size: 1rem; font-weight: 700; color: #1a56db; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .card-title {
+      font-size: 1rem; font-weight: 700; color: #1a56db;
+      margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+
     .field { margin-bottom: 14px; }
-    label { display: block; font-size: 0.82rem; font-weight: 600; color: #4a5568; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.03em; }
-    input, select { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; color: #1a202c; background: #f7fafc; font-family: inherit; }
+    label {
+      display: block; font-size: 0.82rem; font-weight: 600;
+      color: #4a5568; margin-bottom: 5px;
+      text-transform: uppercase; letter-spacing: 0.03em;
+    }
+    input, select {
+      width: 100%; padding: 14px;
+      border: 2px solid #e2e8f0; border-radius: 10px;
+      font-size: 1rem; color: #1a202c;
+      background: #f7fafc;
+      font-family: inherit;
+    }
+    /* iOS: nÃ£o remover appearance do select â deixa o picker nativo funcionar */
     select { cursor: pointer; }
-    input:focus, select:focus { outline: none; border-color: #1a56db; background: white; }
+    input:focus, select:focus {
+      outline: none; border-color: #1a56db; background: white;
+    }
     input::placeholder { color: #a0aec0; }
+
     #pix-list { margin-bottom: 10px; }
-    .pix-item { background: #f0f4ff; border: 2px solid #c7d2fe; border-radius: 12px; padding: 14px 14px 10px; margin-bottom: 10px; position: relative; }
-    .pix-item-header { font-weight: 700; font-size: 0.85rem; color: #1a56db; margin-bottom: 12px; padding-right: 70px; }
+
+    .pix-item {
+      background: #f0f4ff; border: 2px solid #c7d2fe;
+      border-radius: 12px; padding: 14px 14px 10px;
+      margin-bottom: 10px; position: relative;
+    }
+    .pix-item-header {
+      font-weight: 700; font-size: 0.85rem;
+      color: #1a56db; margin-bottom: 12px;
+      padding-right: 70px;
+    }
     .pix-item .field { margin-bottom: 10px; }
     .pix-item label { font-size: 0.78rem; }
     .pix-item input, .pix-item select { padding: 12px; font-size: 0.95rem; }
-    .btn-remove { position: absolute; top: 10px; right: 10px; background: #fee2e2; color: #e53e3e; border: none; border-radius: 8px; padding: 8px 12px; font-size: 0.8rem; font-weight: 700; cursor: pointer; min-width: 60px; min-height: 36px; }
-    .btn { display: block; width: 100%; padding: 16px; margin-bottom: 10px; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; text-align: center; font-family: inherit; min-height: 52px; }
+
+    /* BotÃ£o remover â Ã¡rea de toque generosa */
+    .btn-remove {
+      position: absolute; top: 10px; right: 10px;
+      background: #fee2e2; color: #e53e3e;
+      border: none; border-radius: 8px;
+      padding: 8px 12px; font-size: 0.8rem; font-weight: 700;
+      cursor: pointer; min-width: 60px; min-height: 36px;
+    }
+
+    /* BotÃµes principais */
+    .btn {
+      display: block; width: 100%;
+      padding: 16px; margin-bottom: 10px;
+      border: none; border-radius: 12px;
+      font-size: 1rem; font-weight: 700;
+      cursor: pointer; text-align: center;
+      font-family: inherit; min-height: 52px;
+    }
     .btn:last-child { margin-bottom: 0; }
+
     .btn-add   { background: #e0e7ff; color: #1a56db; }
     .btn-save  { background: #1a56db; color: white; }
     .btn-clear { background: #fff0f0; color: #e53e3e; }
     .btn-export{ background: #16a34a; color: white; }
-    .btn-admin-toggle { display: block; width: 100%; background: none; border: none; color: #a0aec0; font-size: 0.78rem; cursor: pointer; padding: 16px 10px; text-align: center; font-family: inherit; min-height: 48px; }
-    #success-banner { display: none; background: #f0fdf4; border: 2px solid #86efac; border-radius: 14px; padding: 24px 20px; margin-bottom: 16px; text-align: center; }
+
+    .btn-admin-toggle {
+      display: block; width: 100%; background: none; border: none;
+      color: #a0aec0; font-size: 0.78rem; cursor: pointer;
+      padding: 16px 10px; text-align: center; font-family: inherit;
+      min-height: 48px;
+    }
+
+    /* Sucesso */
+    #success-banner {
+      display: none; background: #f0fdf4;
+      border: 2px solid #86efac; border-radius: 14px;
+      padding: 24px 20px; margin-bottom: 16px; text-align: center;
+    }
     .icon-big { font-size: 2.5rem; margin-bottom: 8px; }
     #success-banner h2 { color: #16a34a; font-size: 1.1rem; margin-bottom: 8px; }
     #success-banner p  { color: #4a5568; font-size: 0.9rem; line-height: 1.6; }
+
+    /* Admin */
     #admin-section { display: none; }
-    .admin-lock { background: #fffbeb; border: 2px solid #fcd34d; border-radius: 14px; padding: 20px; margin-bottom: 16px; }
-    .admin-title { font-size: 0.9rem; font-weight: 700; color: #92400e; margin-bottom: 12px; }
+    .admin-lock {
+      background: #fffbeb; border: 2px solid #fcd34d;
+      border-radius: 14px; padding: 20px; margin-bottom: 16px;
+    }
+    .admin-title {
+      font-size: 0.9rem; font-weight: 700; color: #92400e;
+      margin-bottom: 12px;
+    }
     .admin-input-row { display: flex; gap: 8px; }
     .admin-input-row input { flex: 1; }
-    .btn-unlock { padding: 12px 18px; background: #f59e0b; color: white; border: none; border-radius: 10px; font-size: 0.9rem; font-weight: 700; cursor: pointer; white-space: nowrap; font-family: inherit; min-height: 48px; }
+    .btn-unlock {
+      padding: 12px 18px; background: #f59e0b; color: white;
+      border: none; border-radius: 10px; font-size: 0.9rem;
+      font-weight: 700; cursor: pointer; white-space: nowrap;
+      font-family: inherit; min-height: 48px;
+    }
     #admin-erro { color: #e53e3e; font-size: 0.8rem; margin-top: 8px; display: none; }
     #admin-content { display: none; }
-    .summary-title { font-size: 1rem; font-weight: 700; color: #16a34a; margin-bottom: 12px; }
+
+    /* Tabela */
+    .summary-title {
+      font-size: 1rem; font-weight: 700; color: #16a34a;
+      margin-bottom: 12px;
+    }
     .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 440px; }
     th { background: #1a56db; color: white; padding: 9px 10px; text-align: left; font-weight: 600; }
     td { padding: 8px 10px; border-bottom: 1px solid #e2e8f0; color: #2d3748; }
     tr:nth-child(even) td { background: #f7fafc; }
-    .badge-viagem { background: #dbeafe; color: #1e40af; border-radius: 6px; padding: 2px 7px; font-weight: 700; font-size: 0.78rem; white-space: nowrap; }
+    .badge-viagem {
+      background: #dbeafe; color: #1e40af;
+      border-radius: 6px; padding: 2px 7px;
+      font-weight: 700; font-size: 0.78rem; white-space: nowrap;
+    }
     .total-row td { font-weight: 700; background: #f0fdf4 !important; color: #166534; }
-    .counter-bar { background: #ebf8ff; border: 1px solid #bee3f8; border-radius: 10px; padding: 8px 14px; font-size: 0.85rem; color: #2b6cb0; font-weight: 600; margin-bottom: 14px; text-align: center; }
-    #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1a202c; color: white; padding: 12px 22px; border-radius: 30px; font-size: 0.9rem; font-weight: 600; transition: transform 0.3s ease; z-index: 9999; max-width: 90vw; text-align: center; pointer-events: none; }
+    .counter-bar {
+      background: #ebf8ff; border: 1px solid #bee3f8;
+      border-radius: 10px; padding: 8px 14px;
+      font-size: 0.85rem; color: #2b6cb0; font-weight: 600;
+      margin-bottom: 14px; text-align: center;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1a202c; color: white;
+      padding: 12px 22px; border-radius: 30px;
+      font-size: 0.9rem; font-weight: 600;
+      transition: transform 0.3s ease;
+      z-index: 9999; max-width: 90vw; text-align: center;
+      pointer-events: none;
+    }
     #toast.show { transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
+
 <header>
-  <h1>&#x1F4B8; Registro de PIX</h1>
+  <h1>ð¸ Registro de PIX</h1>
   <p>Preencha os dados de cada PIX realizado na viagem</p>
 </header>
+
 <div class="container">
+
   <div id="form-section">
     <div class="card">
-      <div class="card-title">&#x1F464; Identificacao</div>
-      <div class="field"><label>Seu Nome</label><input type="text" id="promotor" placeholder="Ex: Joao Silva" autocomplete="name" /></div>
-      <div class="field"><label>Nome ou Codigo da Viagem</label><input type="text" id="viagem" placeholder="Ex: Viagem SP - Mar/2026" /></div>
+      <div class="card-title">ð¤ IdentificaÃ§Ã£o</div>
+      <div class="field">
+        <label>Seu Nome</label>
+        <input type="text" id="promotor" placeholder="Ex: JoÃ£o Silva" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label>Nome ou CÃ³digo da Viagem</label>
+        <input type="text" id="viagem" placeholder="Ex: Viagem SP â Mar/2026" />
+      </div>
     </div>
+
     <div class="card">
-      <div class="card-title">&#x1F4CB; PIX Realizados</div>
+      <div class="card-title">ð PIX Realizados</div>
       <div id="pix-list"></div>
-      <button class="btn btn-add" id="btn-add-pix">+ Adicionar PIX</button>
+      <button class="btn btn-add" id="btn-add-pix">â Adicionar PIX</button>
     </div>
+
     <div class="card">
-      <div class="card-title">&#x2705; Finalizar</div>
-      <button class="btn btn-save" id="btn-salvar">Salvar Registros</button>
-      <button class="btn btn-clear" id="btn-limpar">Apagar tudo e recomecar</button>
+      <div class="card-title">â Finalizar</div>
+      <button class="btn btn-save" id="btn-salvar">ð¾ Salvar Registros</button>
+      <button class="btn btn-clear" id="btn-limpar">ðï¸ Apagar tudo e recomeÃ§ar</button>
     </div>
   </div>
+
   <div id="success-banner">
-    <div class="icon-big">&#x2705;</div>
+    <div class="icon-big">â</div>
     <h2>Registros salvos!</h2>
     <p id="success-msg"></p>
     <br>
-    <button class="btn btn-add" id="btn-nova-viagem" style="margin-top:8px;">+ Registrar outra viagem</button>
+    <button class="btn btn-add" id="btn-nova-viagem" style="margin-top:8px;">â Registrar outra viagem</button>
   </div>
-  <button class="btn-admin-toggle" id="btn-toggle-admin">Area administrativa</button>
+
+  <button class="btn-admin-toggle" id="btn-toggle-admin">âï¸ Ãrea administrativa</button>
+
   <div id="admin-section">
     <div class="admin-lock">
-      <div class="admin-title">Acesso restrito - apenas administrador</div>
+      <div class="admin-title">ð Acesso restrito â apenas administrador</div>
       <div class="admin-input-row">
         <input type="password" id="admin-senha" placeholder="Senha admin" />
         <button class="btn-unlock" id="btn-entrar-admin">Entrar</button>
       </div>
       <p id="admin-erro">Senha incorreta.</p>
     </div>
+
     <div id="admin-content">
       <div class="card">
-        <div class="summary-title">Todos os Registros</div>
+        <div class="summary-title">ð Todos os Registros</div>
         <div class="counter-bar" id="counter-bar"></div>
-        <button class="btn btn-export" id="btn-exportar" style="margin-bottom:14px;">Exportar Planilha (.csv)</button>
+        <button class="btn btn-export" id="btn-exportar" style="margin-bottom:14px;">ð¥ Exportar Planilha (.csv)</button>
         <div class="table-wrap">
-          <table><thead><tr><th>Viagem</th><th>Promotor</th><th>Data</th><th>Valor (R$)</th><th>Conta</th><th>Quem Pagou</th></tr></thead><tbody id="summary-body"></tbody></table>
+          <table>
+            <thead>
+              <tr>
+                <th>Viagem</th><th>Promotor</th><th>Data</th>
+                <th>Valor (R$)</th><th>Conta</th><th>Quem Pagou</th>
+              </tr>
+            </thead>
+            <tbody id="summary-body"></tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
+
 </div>
+
 <div id="toast"></div>
+
 <script>
-var ADMIN_SENHA='admin123',STORAGE_KEY='registros_pix_v2';
-var CONTAS=[{value:'juridica',label:'Juridica (Bradesco)'},{value:'grupo',label:'Grupo Gregorio'},{value:'fisica',label:'Fisica'}];
-var pixCount=0;
-document.addEventListener('DOMContentLoaded',function(){
-  addPix();
-  get('btn-add-pix').addEventListener('click',addPix);
-  get('btn-salvar').addEventListener('click',salvarDados);
-  get('btn-limpar').addEventListener('click',limparTudo);
-  get('btn-nova-viagem').addEventListener('click',novaViagem);
-  get('btn-toggle-admin').addEventListener('click',toggleAdmin);
-  get('btn-entrar-admin').addEventListener('click',verificarSenha);
-  get('btn-exportar').addEventListener('click',exportarCSV);
-  get('admin-senha').addEventListener('keydown',function(e){if(e.key==='Enter')verificarSenha();});
-  get('pix-list').addEventListener('click',function(e){var btn=e.target.closest('.btn-remove');if(btn)removePix(btn.dataset.id);});
-});
-function get(id){return document.getElementById(id);}
-function toast(msg){var t=get('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},3000);}
-function addPix(){
-  pixCount++;var n=pixCount;
-  var optsHtml='<option value="" disabled selected>Selecione a conta...</option>';
-  for(var i=0;i<CONTAS.length;i++){optsHtml+='<option value="'+CONTAS[i].value+'">'+CONTAS[i].label+'</option>';}
-  var div=document.createElement('div');div.className='pix-item';div.id='pix-'+n;
-  div.innerHTML='<div class="pix-item-header">PIX #'+n+'</div><button type="button" class="btn-remove" data-id="'+n+'">X Remover</button><div class="field"><label>Data do PIX</label><input type="date" id="data-'+n+'" /></div><div class="field"><label>Valor (R$)</label><input type="number" id="valor-'+n+'" placeholder="0,00" min="0" step="0.01" inputmode="decimal" /></div><div class="field"><label>Conta Destinataria</label><select id="conta-'+n+'">'+optsHtml+'</select></div><div class="field"><label>Nome de Quem Fez o PIX</label><input type="text" id="pagador-'+n+'" placeholder="Ex: Maria Oliveira" /></div>';
-  get('pix-list').appendChild(div);
-  var hoje=new Date().toISOString().split('T')[0];get('data-'+n).value=hoje;
-  setTimeout(function(){div.scrollIntoView({behavior:'smooth',block:'start'});},100);
-}
-function removePix(n){var el=get('pix-'+n);if(el)el.remove();}
-function coletarDados(){
-  var promotor=get('promotor').value.trim();var viagem=get('viagem').value.trim();
-  if(!promotor){toast('Preencha seu nome!');return null;}
-  if(!viagem){toast('Preencha o nome da viagem!');return null;}
-  var items=document.querySelectorAll('.pix-item');
-  if(items.length===0){toast('Adicione pelo menos um PIX!');return null;}
-  var registros=[];var valido=true;
-  for(var i=0;i<items.length;i++){
-    var id=items[i].id.replace('pix-','');
-    var data=get('data-'+id)?get('data-'+id).value:'';
-    var valor=get('valor-'+id)?get('valor-'+id).value:'';
-    var conta=get('conta-'+id)?get('conta-'+id).value:'';
-    var pagador=get('pagador-'+id)?get('pagador-'+id).value.trim():'';
-    if(!data||!valor||!conta||!pagador){toast('Preencha todos os campos de cada PIX!');valido=false;break;}
-    var contaLabel=conta;
-    for(var j=0;j<CONTAS.length;j++){if(CONTAS[j].value===conta){contaLabel=CONTAS[j].label;break;}}
-    registros.push({promotor:promotor,viagem:viagem,data:data,valor:parseFloat(valor),conta:conta,contaLabel:contaLabel,pagador:pagador,timestamp:new Date().toISOString()});
+  /* =========================================================
+     CONFIGURAÃÃO
+  ========================================================= */
+  var ADMIN_SENHA = 'admin123';
+  var STORAGE_KEY = 'registros_pix_v2';
+  var CONTAS = [
+    { value: 'juridica', label: 'JurÃ­dica (Bradesco)' },
+    { value: 'grupo',    label: 'Grupo GregÃ³rio' },
+    { value: 'fisica',   label: 'FÃ­sica' }
+  ];
+  var pixCount = 0;
+
+  /* =========================================================
+     INICIALIZAÃÃO â todos os eventos aqui, sem onclick no HTML
+  ========================================================= */
+  document.addEventListener('DOMContentLoaded', function () {
+    addPix();
+
+    get('btn-add-pix').addEventListener('click', addPix);
+    get('btn-salvar').addEventListener('click', salvarDados);
+    get('btn-limpar').addEventListener('click', limparTudo);
+    get('btn-nova-viagem').addEventListener('click', novaViagem);
+    get('btn-toggle-admin').addEventListener('click', toggleAdmin);
+    get('btn-entrar-admin').addEventListener('click', verificarSenha);
+    get('btn-exportar').addEventListener('click', exportarCSV);
+
+    // Enter no campo de senha admin
+    get('admin-senha').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') verificarSenha();
+    });
+
+    // DelegaÃ§Ã£o de eventos para botÃµes "Remover" criados dinamicamente
+    get('pix-list').addEventListener('click', function (e) {
+      var btn = e.target.closest('.btn-remove');
+      if (btn) removePix(btn.dataset.id);
+    });
+  });
+
+  /* =========================================================
+     UTILITÃRIOS
+  ========================================================= */
+  function get(id) { return document.getElementById(id); }
+
+  function toast(msg) {
+    var t = get('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(function () { t.classList.remove('show'); }, 3000);
   }
-  return valido?registros:null;
-}
-function salvarDados(){
-  var novos=coletarDados();if(!novos)return;
-  var existentes=[];try{existentes=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch(e){}
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(existentes.concat(novos)));
-  get('form-section').style.display='none';get('success-banner').style.display='block';
-  var total=0;for(var i=0;i<novos.length;i++)total+=novos[i].valor;
-  get('success-msg').innerHTML='<strong>'+novos.length+' PIX</strong> da viagem "<strong>'+novos[0].viagem+'</strong>" salvos.<br>Total: <strong>R$ '+total.toFixed(2).replace('.',',')+'</strong><br><br>Voce pode fechar ou registrar outra viagem.';
-}
-function novaViagem(){
-  get('success-banner').style.display='none';get('form-section').style.display='block';
-  get('viagem').value='';get('pix-list').innerHTML='';pixCount=0;addPix();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function limparTudo(){
-  if(!window.confirm('Tem certeza? Todos os dados preenchidos serao apagados.'))return;
-  get('pix-list').innerHTML='';get('promotor').value='';get('viagem').value='';pixCount=0;addPix();toast('Formulario limpo.');
-}
-function toggleAdmin(){var s=get('admin-section');s.style.display=(s.style.display==='none'||s.style.display==='')?'block':'none';}
-function verificarSenha(){
-  var senha=get('admin-senha').value;
-  if(senha===ADMIN_SENHA){get('admin-erro').style.display='none';get('admin-content').style.display='block';renderizarTabela();}
-  else{get('admin-erro').style.display='block';get('admin-senha').value='';}
-}
-function renderizarTabela(){
-  var dados=[];try{dados=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch(e){}
-  var counter=get('counter-bar');var tbody=get('summary-body');
-  if(dados.length===0){counter.textContent='Nenhum registro encontrado neste dispositivo.';tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:#a0aec0;padding:20px;">Sem dados</td></tr>';return;}
-  var totais={};var totalGeral=0;
-  for(var i=0;i<dados.length;i++){var r=dados[i];totais[r.viagem]=(totais[r.viagem]||0)+r.valor;totalGeral+=r.valor;}
-  dados.sort(function(a,b){return a.viagem.localeCompare(b.viagem)||a.data.localeCompare(b.data);});
-  var html='';var lastViagem=null;
-  for(var i=0;i<dados.length;i++){
-    var r=dados[i];
-    if(r.viagem!==lastViagem){if(lastViagem!==null){html+='<tr class="total-row"><td colspan="3" style="text-align:right">Total - '+lastViagem+'</td><td>R$ '+totais[lastViagem].toFixed(2).replace('.',',')+'</td><td colspan="2"></td></tr>';}lastViagem=r.viagem;}
-    var dataFmt=r.data?r.data.split('-').reverse().join('/'):'';
-    html+='<tr><td><span class="badge-viagem">'+r.viagem+'</span></td><td>'+r.promotor+'</td><td>'+dataFmt+'</td><td>R$ '+r.valor.toFixed(2).replace('.',',')+'</td><td>'+(r.contaLabel||r.conta)+'</td><td>'+r.pagador+'</td></tr>';
+
+  /* =========================================================
+     ADICIONAR / REMOVER PIX
+  ========================================================= */
+  function addPix() {
+    pixCount++;
+    var n = pixCount;
+
+    var optsHtml = '<option value="" disabled selected>Selecione a conta...</option>';
+    for (var i = 0; i < CONTAS.length; i++) {
+      optsHtml += '<option value="' + CONTAS[i].value + '">' + CONTAS[i].label + '</option>';
+    }
+
+    var div = document.createElement('div');
+    div.className = 'pix-item';
+    div.id = 'pix-' + n;
+    div.innerHTML =
+      '<div class="pix-item-header">PIX #' + n + '</div>' +
+      '<button type="button" class="btn-remove" data-id="' + n + '">â Remover</button>' +
+      '<div class="field"><label>Data do PIX</label>' +
+        '<input type="date" id="data-' + n + '" /></div>' +
+      '<div class="field"><label>Valor (R$)</label>' +
+        '<input type="number" id="valor-' + n + '" placeholder="0,00" min="0" step="0.01" inputmode="decimal" /></div>' +
+      '<div class="field"><label>Conta DestinatÃ¡ria</label>' +
+        '<select id="conta-' + n + '">' + optsHtml + '</select></div>' +
+      '<div class="field"><label>Nome de Quem Fez o PIX</label>' +
+        '<input type="text" id="pagador-' + n + '" placeholder="Ex: Maria Oliveira" /></div>';
+
+    get('pix-list').appendChild(div);
+
+    // Data de hoje como padrÃ£o
+    var hoje = new Date().toISOString().split('T')[0];
+    get('data-' + n).value = hoje;
+
+    // Scroll suave atÃ© o novo PIX
+    setTimeout(function () { div.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
   }
-  if(lastViagem){html+='<tr class="total-row"><td colspan="3" style="text-align:right">Total - '+lastViagem+'</td><td>R$ '+totais[lastViagem].toFixed(2).replace('.',',')+'</td><td colspan="2"></td></tr>';}
-  tbody.innerHTML=html;
-  counter.textContent=dados.length+' PIX registrado(s) - Total geral: R$ '+totalGeral.toFixed(2).replace('.',',');
-}
-function exportarCSV(){
-  var dados=[];try{dados=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch(e){}
-  if(dados.length===0){toast('Nenhum dado para exportar!');return;}
-  var linhas=['"Viagem";"Promotor";"Data";"Valor (R$)";"Conta Destinataria";"Quem Fez o PIX"'];
-  for(var i=0;i<dados.length;i++){
-    var r=dados[i];var dataFmt=r.data?r.data.split('-').reverse().join('/'):'';
-    linhas.push('"'+r.viagem.replace(/"/g,'""')+'";"'+r.promotor.replace(/"/g,'""')+'";"'+dataFmt+'";"'+r.valor.toFixed(2).replace('.',',')+'";"'+(r.contaLabel||r.conta).replace(/"/g,'""')+'";"'+r.pagador.replace(/"/g,'""')+'"');
+
+  function removePix(n) {
+    var el = get('pix-' + n);
+    if (el) el.remove();
   }
-  var csv='﻿'+linhas.join('
-');
-  var blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');a.href=url;a.download='pix_registros_'+new Date().toISOString().slice(0,10)+'.csv';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
-  toast('Planilha exportada!');
-}
+
+  /* =========================================================
+     COLETA E VALIDAÃÃO
+  ========================================================= */
+  function coletarDados() {
+    var promotor = get('promotor').value.trim();
+    var viagem   = get('viagem').value.trim();
+
+    if (!promotor) { toast('â ï¸ Preencha seu nome!'); return null; }
+    if (!viagem)   { toast('â ï¸ Preencha o nome da viagem!'); return null; }
+
+    var items = document.querySelectorAll('.pix-item');
+    if (items.length === 0) { toast('â ï¸ Adicione pelo menos um PIX!'); return null; }
+
+    var registros = [];
+    var valido = true;
+
+    for (var i = 0; i < items.length; i++) {
+      var id      = items[i].id.replace('pix-', '');
+      var data    = get('data-'   + id) ? get('data-'   + id).value : '';
+      var valor   = get('valor-'  + id) ? get('valor-'  + id).value : '';
+      var conta   = get('conta-'  + id) ? get('conta-'  + id).value : '';
+      var pagador = get('pagador-'+ id) ? get('pagador-'+ id).value.trim() : '';
+
+      if (!data || !valor || !conta || !pagador) {
+        toast('â ï¸ Preencha todos os campos de cada PIX!');
+        valido = false;
+        break;
+      }
+
+      var contaLabel = conta;
+      for (var j = 0; j < CONTAS.length; j++) {
+        if (CONTAS[j].value === conta) { contaLabel = CONTAS[j].label; break; }
+      }
+
+      registros.push({
+        promotor: promotor, viagem: viagem,
+        data: data, valor: parseFloat(valor),
+        conta: conta, contaLabel: contaLabel,
+        pagador: pagador,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    return valido ? registros : null;
+  }
+
+  /* =========================================================
+     SALVAR
+  ========================================================= */
+  function salvarDados() {
+    var novos = coletarDados();
+    if (!novos) return;
+
+    var existentes = [];
+    try { existentes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) {}
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(existentes.concat(novos)));
+
+    get('form-section').style.display   = 'none';
+    get('success-banner').style.display = 'block';
+
+    var total = 0;
+    for (var i = 0; i < novos.length; i++) total += novos[i].valor;
+
+    get('success-msg').innerHTML =
+      '<strong>' + novos.length + ' PIX</strong> da viagem "<strong>' + novos[0].viagem + '</strong>" salvos.<br>' +
+      'Total: <strong>R$ ' + total.toFixed(2).replace('.', ',') + '</strong><br><br>' +
+      'VocÃª pode fechar ou registrar outra viagem.';
+  }
+
+  /* =========================================================
+     NOVA VIAGEM
+  ========================================================= */
+  function novaViagem() {
+    get('success-banner').style.display = 'none';
+    get('form-section').style.display   = 'block';
+    get('viagem').value = '';
+    get('pix-list').innerHTML = '';
+    pixCount = 0;
+    addPix();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* =========================================================
+     LIMPAR
+  ========================================================= */
+  function limparTudo() {
+    if (!window.confirm('Tem certeza? Todos os dados preenchidos serÃ£o apagados.')) return;
+    get('pix-list').innerHTML = '';
+    get('promotor').value = '';
+    get('viagem').value   = '';
+    pixCount = 0;
+    addPix();
+    toast('ðï¸ FormulÃ¡rio limpo.');
+  }
+
+  /* =========================================================
+     ADMIN
+  ========================================================= */
+  function toggleAdmin() {
+    var s = get('admin-section');
+    s.style.display = (s.style.display === 'none' || s.style.display === '') ? 'block' : 'none';
+  }
+
+  function verificarSenha() {
+    var senha = get('admin-senha').value;
+    if (senha === ADMIN_SENHA) {
+      get('admin-erro').style.display   = 'none';
+      get('admin-content').style.display = 'block';
+      renderizarTabela();
+    } else {
+      get('admin-erro').style.display = 'block';
+      get('admin-senha').value = '';
+    }
+  }
+
+  function renderizarTabela() {
+    var dados = [];
+    try { dados = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) {}
+
+    var counter = get('counter-bar');
+    var tbody   = get('summary-body');
+
+    if (dados.length === 0) {
+      counter.textContent = 'Nenhum registro encontrado neste dispositivo.';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#a0aec0;padding:20px;">Sem dados</td></tr>';
+      return;
+    }
+
+    var totais = {};
+    var totalGeral = 0;
+    for (var i = 0; i < dados.length; i++) {
+      var r = dados[i];
+      totais[r.viagem] = (totais[r.viagem] || 0) + r.valor;
+      totalGeral += r.valor;
+    }
+
+    dados.sort(function (a, b) {
+      return a.viagem.localeCompare(b.viagem) || a.data.localeCompare(b.data);
+    });
+
+    var html = '';
+    var lastViagem = null;
+
+    for (var i = 0; i < dados.length; i++) {
+      var r = dados[i];
+      if (r.viagem !== lastViagem) {
+        if (lastViagem !== null) {
+          html += '<tr class="total-row"><td colspan="3" style="text-align:right">Total â ' + lastViagem + '</td>' +
+            '<td>R$ ' + totais[lastViagem].toFixed(2).replace('.', ',') + '</td><td colspan="2"></td></tr>';
+        }
+        lastViagem = r.viagem;
+      }
+      var dataFmt = r.data ? r.data.split('-').reverse().join('/') : '';
+      html += '<tr><td><span class="badge-viagem">' + r.viagem + '</span></td>' +
+        '<td>' + r.promotor + '</td><td>' + dataFmt + '</td>' +
+        '<td>R$ ' + r.valor.toFixed(2).replace('.', ',') + '</td>' +
+        '<td>' + (r.contaLabel || r.conta) + '</td>' +
+        '<td>' + r.pagador + '</td></tr>';
+    }
+    if (lastViagem) {
+      html += '<tr class="total-row"><td colspan="3" style="text-align:right">Total â ' + lastViagem + '</td>' +
+        '<td>R$ ' + totais[lastViagem].toFixed(2).replace('.', ',') + '</td><td colspan="2"></td></tr>';
+    }
+
+    tbody.innerHTML = html;
+    counter.textContent = dados.length + ' PIX registrado(s) Â· Total geral: R$ ' + totalGeral.toFixed(2).replace('.', ',');
+  }
+
+  /* =========================================================
+     EXPORTAR CSV
+  ========================================================= */
+  function exportarCSV() {
+    var dados = [];
+    try { dados = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) {}
+    if (dados.length === 0) { toast('Nenhum dado para exportar!'); return; }
+
+    var linhas = ['"Viagem";"Promotor";"Data";"Valor (R$)";"Conta DestinatÃ¡ria";"Quem Fez o PIX"'];
+    for (var i = 0; i < dados.length; i++) {
+      var r = dados[i];
+      var dataFmt = r.data ? r.data.split('-').reverse().join('/') : '';
+      linhas.push(
+        '"' + r.viagem.replace(/"/g,'""') + '";"' +
+        r.promotor.replace(/"/g,'""') + '";"' +
+        dataFmt + '";"' +
+        r.valor.toFixed(2).replace('.', ',') + '";"' +
+        (r.contaLabel || r.conta).replace(/"/g,'""') + '";"' +
+        r.pagador.replace(/"/g,'""') + '"'
+      );
+    }
+
+    var csv  = '\uFEFF' + linhas.join('\n');
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement('a');
+    a.href     = url;
+    a.download = 'pix_registros_' + new Date().toISOString().slice(0,10) + '.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast('ð¥ Planilha exportada!');
+  }
 </script>
+
 </body>
 </html>
